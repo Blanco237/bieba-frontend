@@ -9,8 +9,10 @@ import SvelteIcon from "../../icons/Svelte"
 import TailwindIcon from "../../icons/Tailwind"
 import VueIcon from "../../icons/Vue"
 import styles from './home.module.css'
+import { useNavigate } from "react-router-dom"
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <main className={styles.body} >
       <div className={`${styles.circle} ${styles.circle1}`} />
@@ -52,7 +54,7 @@ const Home = () => {
           <h1 className={styles.title}>Secure Your Digital World with Bieba Auth</h1>
           <p className={styles.subtitle}>Effortless Authentication, Unmatched Security - Protect What Matters Most</p>
           <div className={styles.buttons}>
-            <Button>Get Started</Button>
+            <Button onClick={() => navigate('/register')}>Get Started</Button>
             <Button variant="outlined">See Docs</Button>
           </div>
         </section>

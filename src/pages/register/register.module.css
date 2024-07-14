@@ -1,0 +1,92 @@
+.body {
+  @apply flex gap-0;
+}
+
+.body > section {
+  @apply w-1/2;
+}
+
+.right {
+  @apply relative overflow-hidden isolate h-screen;
+  background: linear-gradient(180deg, #3730a3 0%, #312e81 100%);
+}
+
+.circle1 {
+  width: 1090px;
+  height: 1090px;
+  border-radius: 100%;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.03) 16.29%,
+    rgba(255, 255, 255, 0) 63.17%
+  );
+  position: absolute;
+}
+
+.circle2 {
+  width: 935px;
+  height: 935px;
+  border-radius: 100%;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.02) 16.29%,
+    rgba(255, 255, 255, 0) 63.17%
+  );
+  position: absolute;
+}
+
+.circle3 {
+  width: 935px;
+  height: 935px;
+  border-radius: 100%;
+  background: linear-gradient(
+    164deg,
+    rgba(255, 255, 255, 0.01) 16.01%,
+    rgba(255, 255, 255, 0) 57.64%
+  );
+  position: absolute;
+}
+
+.circle4 {
+  width: 700px;
+  height: 700px;
+  border-radius: 100%;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.01) 16.29%,
+    rgba(255, 255, 255, 0) 63.17%
+  );
+  position: absolute;
+}
+
+.bubble {
+    @apply flex items-center justify-center p-4 rounded-[18px] absolute pointer-events-none;
+    background: linear-gradient(
+      180deg,
+      rgba(79, 70, 229, 0.4) 0%,
+      rgba(79, 70, 229, 0) 100%
+    );
+  }
+  
+  .bubble:empty {
+      filter: blur(2px);
+  }
+  
+.left {
+    @apply flex flex-col px-28 py-6 items-start gap-7 h-screen overflow-y-auto;
+    scrollbar-width: thin;
+}
+
+
+.left > * {
+    flex-shrink: 0;
+}
+
+.title {
+@apply text-3xl font-semibold text-black;
+}
+
+.subtitle {
+    @apply text-base text-muted;
+
+}
