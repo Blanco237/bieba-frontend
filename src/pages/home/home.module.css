@@ -1,0 +1,74 @@
+.body {
+  @apply overflow-hidden h-screen w-full  px-8 py-4 relative isolate flex items-center justify-center;
+  background: linear-gradient(180deg, #3730a3 0%, #312e81 100%);
+}
+
+.header {
+  @apply absolute top-4 left-8;
+}
+
+.circle {
+  width: 935px;
+  height: 935px;
+  flex-shrink: 0;
+  border-radius: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+.circle1 {
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.02) 16.29%,
+    rgba(255, 255, 255, 0) 63.17%
+  );
+  @apply -bottom-9 -left-6;
+}
+
+.circle2 {
+  @apply -bottom-6 left-1/2;
+  background: linear-gradient(
+    164deg,
+    rgba(255, 255, 255, 0.01) 16.01%,
+    rgba(255, 255, 255, 0) 57.64%
+  );
+}
+
+.content {
+  @apply flex flex-col items-center px-16 gap-6;
+}
+
+.title {
+  @apply text-center text-7xl font-semibold text-white;
+}
+
+.subtitle {
+  @apply text-center text-white text-xl;
+}
+
+.buttons {
+  @apply flex items-center gap-4;
+}
+
+.bubble {
+  @apply flex items-center justify-center p-4 rounded-[18px] absolute pointer-events-none;
+  animation: bounce 3s linear infinite;
+  background: linear-gradient(
+    180deg,
+    rgba(79, 70, 229, 0.4) 0%,
+    rgba(79, 70, 229, 0) 100%
+  );
+}
+
+.bubble:empty {
+    filter: blur(2px);
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+    }
+    50% {
+        transform: none;
+    }
+}
