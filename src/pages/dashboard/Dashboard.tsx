@@ -1,4 +1,4 @@
-import styles from "./register.module.css";
+import styles from "./dashboard.module.css";
 import ReactIcon from "../../icons/React";
 import DigitalOceanIcon from "../../icons/DigitalOcean";
 import FireshipIcon from "../../icons/Fireship";
@@ -8,70 +8,66 @@ import UserPlusIcon from "../../icons/UserPlus";
 import LogoMarkIcon from "../../icons/LogoMark";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../../api";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Organization } from "../../types";
+import NodeIcon from "../../icons/Node";
+import VueIcon from "../../icons/Vue";
 
-const Register = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    callback: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+const Dashboard = () => {
+  const { id } = useParams();
+  const [organization, setOrganization] = useState<Organization | null>(null);
+  const [callback, setCallback] = useState('');
+  const [updating, setUpdating] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const disabled = useMemo(() => {
-    if (!formData.name || !formData.callback) return true;
-    return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
-  }, [formData]);
-
-  const registerOrganization = async () => {
-    const data = {
-      name: formData.name,
-      email: formData.email,
-      callback_url: formData.callback,
-    };
+  const updateCallback = async () => {
     try {
-      setLoading(true);
-      const response = await API.post("/organization/register", data);
-      const { id } = response.data;
-      navigate(`/dashboard/${id}`);
+      setUpdating(true);
+      const response = await API.post('/organization/update-callback', { callback, id });
+      const { callback_url } = response.data;
+      setCallback(callback_url)
     } catch (e) {
-      alert("Something Went Wrong. Please try Again");
+      alert('Something went wrong. Please Try Again')
     } finally {
-      setLoading(false);
+      setUpdating(false)
     }
-  };
+  }
+
+  useEffect(() => {
+    const fetchOrganization = async () => {
+      const response = await API.get(`/organization/${id}`);
+      const org = response.data as Organization;
+      setOrganization(org);
+      setCallback(org.callback_url)
+      setLoading(false)
+    }
+
+    fetchOrganization();
+  }, [id])
+
+
+  
 
   return (
     <main className={styles.body}>
       <section className={styles.left}>
         <LogoMarkIcon />
-        <div className="flex flex-col items-start gap-2">
-          <h3 className={styles.title}>Register Organization</h3>
+        {
+          loading ? <>
+          <div>Loading...</div>
+          </> : <><div className="flex flex-col items-start gap-1">
+          <h3 className={styles.title}>{organization?.name} Dashboard - <span className="text-primary text-4xl">{organization?.secrets_aggregate.aggregate.count} Users</span></h3>
           <p className={styles.subtitle}>
-            Innovate, Integrate, and Inspire. Unlock powerful authentication
-            solutions with our robust APIs and comprehensive documentation.
+            {organization?.email}
           </p>
         </div>
         <div className="flex flex-col gap-2 w-full">
           <Input
-            label="Organization Name"
-            value={formData.name}
-            onChange={(val) => setFormData({ ...formData, name: val })}
-            placeholder="Organization"
-          />
-          <Input
-            label="Email"
-            value={formData.email}
-            onChange={(val) => setFormData({ ...formData, email: val })}
-            placeholder="example@example.com"
-          />
-          <Input
             label="Callback URL"
-            value={formData.callback}
-            onChange={(val) => setFormData({ ...formData, callback: val })}
+            value={callback}
+            onChange={(val) => setCallback(val)}
             placeholder="https://example.com/authcallback"
           />
           <p className={`${styles.subtitle} !text-xs`}>
@@ -79,23 +75,27 @@ const Register = () => {
           </p>
         </div>
         <Button
-          disabled={disabled}
-          loading={loading}
+          disabled={!callback}
+          loading={updating}
           fullWidth
-          onClick={registerOrganization}
+          onClick={updateCallback}
         >
-          Submit
-        </Button>
+          Update
+        </Button></>
+        }
       </section>
       <section className={styles.right}>
         <div className={`${styles.circle1} -top-12 -right-80 z-[-1]`} />
         <div className={`${styles.circle2} top-8 -right-60 z-[-1]`} />
         <div className={`${styles.circle3} top-[20%] -right-80 z-[-1]`} />
         <div className={`${styles.circle4} top-[50%] -right-60 z-[-1]`} />
-        <div className={`${styles.bubble} top-[10%] left-[20%]`}>
+        <div className={`${styles.bubble} top-1/2 right-[100px]`}>
           <ReactIcon />
         </div>
-        <div className={`${styles.bubble} top-1/2 right-[100px]`}>
+        <div className={`${styles.bubble}  top-[25%] right-[25%]`}>
+          <VueIcon />
+        </div>
+        <div className={`${styles.bubble}  top-[10%] left-[20%]`}>
           <DigitalOceanIcon />
         </div>
         <div className={`${styles.bubble} right-[10%] top-[10%]`}>
@@ -105,14 +105,13 @@ const Register = () => {
         <div className={`${styles.bubble} bottom-[5%] left-1/2`}>
           <SvelteIcon />
         </div>
-        <div className={`${styles.bubble} top-1/2  left-[120px]`}>
+        <div className={`${styles.bubble} top-[35%]  left-[30%]`}>
           <TailwindIcon />
         </div>
-        <div
-          className={`${styles.bubble} top-1/2  left-1/2 -translate-x-1/2 -translate-y-1/2`}
-        >
-          <UserPlusIcon />
+        <div className={`${styles.bubble} top-[75%]  left-[120px]`}>
+          <NodeIcon />
         </div>
+        
         <div
           className={`${styles.bubble} size-12 rounded-lg bottom-1/2 right-[30%]`}
         />
@@ -133,4 +132,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Dashboard;
