@@ -1,4 +1,4 @@
-import styles from "./register.module.css";
+import styles from "./login.module.css";
 import ReactIcon from "../../icons/React";
 import DigitalOceanIcon from "../../icons/DigitalOcean";
 import FireshipIcon from "../../icons/Fireship";
@@ -11,32 +11,29 @@ import Button from "../../components/button/Button";
 import { useMemo, useState } from "react";
 import API from "../../api";
 import { Link, useNavigate } from "react-router-dom";
+import OtpInput from "../../components/otp-input/OtpInput";
 
-const Register = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    callback: "",
-  });
+const Login = () => {
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
   const navigate = useNavigate();
 
   const disabled = useMemo(() => {
-    if (!formData.name || !formData.callback) return true;
-    return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
-  }, [formData]);
+    return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }, [email]);
 
-  const registerOrganization = async () => {
+  const loginOrganization = async () => {
     const data = {
-      name: formData.name,
-      email: formData.email,
-      callback_url: formData.callback,
+     email
     };
+
     try {
       setLoading(true);
-      const response = await API.post("/organization/register", data);
-      const { id } = response.data;
-      navigate(`/dashboard/${id}`);
+      await API.post("/organization/login", data);
+      setLoading(false);
+      setOtpSent(true);
     } catch (e) {
       alert("Something Went Wrong. Please try Again");
     } finally {
@@ -44,47 +41,69 @@ const Register = () => {
     }
   };
 
+  const verifyOTP = async () => {
+    const data = {
+      code: otp,
+      email
+     };
+ 
+     try {
+       setLoading(true);
+       const response = await API.post("/organization/verify-otp", data);
+       const { id } = response.data;
+       navigate(`/dashboard/${id}`)
+     } catch (e) {
+       alert("Something Went Wrong. Please try Again");
+     } finally {
+       setLoading(false);
+     }
+  }
+
   return (
     <main className={styles.body}>
       <section className={styles.left}>
         <LogoMarkIcon />
         <div className="flex flex-col items-start gap-2">
-          <h3 className={styles.title}>Register Organization</h3>
+          <h3 className={styles.title}>Login Organization</h3>
           <p className={styles.subtitle}>
-            Already Registered? <Link to="/login" className="text-primary font-medium">Please Login</Link>
+            Don't Have An Account?{" "}
+            <Link to="/register" className="text-primary font-medium">
+              Please Register
+            </Link>
           </p>
         </div>
-        <div className="flex flex-col gap-2 w-full">
-          <Input
-            label="Organization Name"
-            value={formData.name}
-            onChange={(val) => setFormData({ ...formData, name: val })}
-            placeholder="Organization"
-          />
-          <Input
-            label="Email"
-            value={formData.email}
-            onChange={(val) => setFormData({ ...formData, email: val })}
-            placeholder="example@example.com"
-          />
-          <Input
-            label="Callback URL"
-            value={formData.callback}
-            onChange={(val) => setFormData({ ...formData, callback: val })}
-            placeholder="https://example.com/authcallback"
-          />
-          <p className={`${styles.subtitle} !text-xs`}>
-            Users will be redirected here after successful authentication.
-          </p>
-        </div>
-        <Button
-          disabled={disabled}
-          loading={loading}
-          fullWidth
-          onClick={registerOrganization}
-        >
-          Submit
-        </Button>
+        {otpSent ? (
+          <>
+            <OtpInput setOtp={setOtp} />
+            <Button
+              disabled={otp.length !== 6}
+              loading={loading}
+              fullWidth
+              onClick={verifyOTP}
+            >
+              Verify
+            </Button>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col gap-2 w-full">
+              <Input
+                label="Email"
+                value={email}
+                onChange={(val) => setEmail(val)}
+                placeholder="example@example.com"
+              />
+            </div>
+            <Button
+              disabled={disabled}
+              loading={loading}
+              fullWidth
+              onClick={loginOrganization}
+            >
+              Submit
+            </Button>
+          </>
+        )}
       </section>
       <section className={styles.right}>
         <div className={`${styles.circle1} -top-12 -right-80 z-[-1]`} />
@@ -132,4 +151,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

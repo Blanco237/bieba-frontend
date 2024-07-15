@@ -58,7 +58,7 @@ const Dashboard = () => {
           loading ? <>
           <div>Loading...</div>
           </> : <><div className="flex flex-col items-start gap-1">
-          <h3 className={styles.title}>{organization?.name} Dashboard - <span className="text-primary text-4xl">{organization?.secrets_aggregate.aggregate.count} Users</span></h3>
+          <h3 className={styles.title}>{organization?.name} Dashboard - <span className="text-primary text-4xl">{organization?.secrets_aggregate.aggregate.count} User(s)</span></h3>
           <p className={styles.subtitle}>
             {organization?.email}
           </p>

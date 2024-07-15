@@ -1,0 +1,23 @@
+.wrapper {
+  @apply flex flex-col items-center gap-4 w-full mb-5;
+}
+
+.title {
+  @apply text-lg text-center;
+}
+
+.body {
+  @apply flex justify-center items-center gap-4 w-full flex-wrap;
+}
+
+.input[value=""] {
+  @apply border-gray-300;
+}
+
+.input:focus {
+  @apply outline-none border-primary border-opacity-45;
+}
+
+.input {
+  @apply size-14 text-center text-2xl font-semibold text-primary rounded-lg border-2 border-primary;
+}
