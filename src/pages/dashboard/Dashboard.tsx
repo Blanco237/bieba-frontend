@@ -4,7 +4,6 @@ import DigitalOceanIcon from "../../icons/DigitalOcean";
 import FireshipIcon from "../../icons/Fireship";
 import SvelteIcon from "../../icons/Svelte";
 import TailwindIcon from "../../icons/Tailwind";
-import UserPlusIcon from "../../icons/UserPlus";
 import LogoMarkIcon from "../../icons/LogoMark";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";

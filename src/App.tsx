@@ -3,6 +3,8 @@ import Home from "./pages/home/Home"
 import Register from "./pages/register/Register"
 import Dashboard from "./pages/dashboard/Dashboard"
 import Login from "./pages/login/Login"
+import Authenticate from "./pages/authenticate/Authenticate"
+import Auth from "./pages/auth/Auth"
 
 function App() {
 
@@ -13,6 +15,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard/:id" element={<Dashboard />} />
+        <Route path="/authenticate" element={<Authenticate />} />
+        <Route path="/auth" element={<Auth />} />
       </Routes>
    </BrowserRouter>
   )
