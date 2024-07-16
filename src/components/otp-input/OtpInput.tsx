@@ -5,10 +5,11 @@ const length = 6;
 
 interface OtpInputProps {
   setOtp: React.Dispatch<React.SetStateAction<string>>
+  hideTitle?: boolean
 }
 
 
-const OtpInput:React.FC<OtpInputProps> = ({ setOtp }) => {
+const OtpInput:React.FC<OtpInputProps> = ({ setOtp, hideTitle = false }) => {
   const [otpArray, setOtpArray] = useState(new Array(length).fill(""));
   const inputRefs = useRef<Array<HTMLInputElement | null>>(new Array(length));
 
@@ -41,7 +42,7 @@ const OtpInput:React.FC<OtpInputProps> = ({ setOtp }) => {
 
   return (
     <section className={styles.wrapper}>
-        <h4 className={styles.title}>Enter the OTP code sent to your email</h4>
+        {hideTitle ? <></> : <h4 className={styles.title}>Enter the OTP code sent to your email</h4>}
         <div className={styles.body}>
       {otpArray.map((value, idx) => {
         return (

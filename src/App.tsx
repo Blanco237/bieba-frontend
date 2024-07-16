@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard/Dashboard"
 import Login from "./pages/login/Login"
 import Authenticate from "./pages/authenticate/Authenticate"
 import Auth from "./pages/auth/Auth"
+import Test from "./pages/test"
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/dashboard/:id" element={<Dashboard />} />
         <Route path="/authenticate" element={<Authenticate />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/test" element={<Test />} />
       </Routes>
    </BrowserRouter>
   )

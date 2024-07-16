@@ -16,28 +16,51 @@ import OTPAuth from "../../components/otp-auth/OTPAuth";
 const Auth = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [key, setKey] = useState('');
-  const [message, setMessage] = useState('');
-  const [name, setName] = useState('');
-  const [mode, setMode] = useState<'qr' | 'otp'>('qr');
+  const [mode, setMode] = useState<"qr" | "otp">("qr");
+  const [details, setDetails] = useState({
+    apikey: "",
+    callback: "",
+    name: "",
+    message: "",
+  });
 
   useEffect(() => {
-    const verifyOrganization = async ()  => {
-        try {
-            const response = await API.post('/organization/verify', { key: localStorage.getItem(STORAGE_KEYS.API_KEY)})
-            const { key, message, name } = response.data;
-            setKey(key);
-            setMessage(message);
-            setName(name);
-            setLoading(false);
-        } catch (e) {
-            alert("Invalid Organization")
-            navigate('/')
-        }
-    }
+    const verifyOrganization = async () => {
+      try {
+        const response = await API.post("/organization/verify", {
+          key: localStorage.getItem(STORAGE_KEYS.API_KEY),
+        });
+        const { key, message, name, callback } = response.data;
+        setDetails({
+          apikey: key,
+          message: message,
+          name: name,
+          callback: callback,
+        });
+        setLoading(false);
+      } catch (e) {
+        alert("Invalid Organization");
+        navigate("/");
+      }
+    };
 
     verifyOrganization();
-  }, [])
+  }, []);
+
+  const redirectToCallback = (callback: string, code: string) => {
+    const encodedCode = encodeURIComponent(code);
+
+    const redirectUrl = new URL(callback);
+    redirectUrl.searchParams.set("code", encodedCode);
+
+    localStorage.removeItem(STORAGE_KEYS.API_KEY);
+
+    window.location.href = redirectUrl.toString();
+  };
+
+  const onAuthSuccess = (code: string) => {
+    redirectToCallback(details.callback, code);
+  };
 
   return (
     <main className={styles.body}>
@@ -48,15 +71,35 @@ const Auth = () => {
         ) : (
           <>
             <div className="flex flex-col items-start gap-2">
-              <h3 className={styles.title}>Authenticate to {name}</h3>
+              <h3 className={styles.title}>Authenticate to {details.name}</h3>
             </div>
             <div className="flex items-center gap-4">
-                <button className={`${styles.chip} ${mode === 'qr' ? styles.active : ''}`} onClick={() => setMode('qr')}>QR Code</button>
-                <button className={`${styles.chip} ${mode === 'otp' ? styles.active : ''}`} onClick={() => setMode('otp')}>OTP</button>
+              <button
+                className={`${styles.chip} ${
+                  mode === "qr" ? styles.active : ""
+                }`}
+                onClick={() => setMode("qr")}
+              >
+                QR Code
+              </button>
+              <button
+                className={`${styles.chip} ${
+                  mode === "otp" ? styles.active : ""
+                }`}
+                onClick={() => setMode("otp")}
+              >
+                OTP
+              </button>
             </div>
-            {
-                mode === 'qr' ? <QRAuth message={message} key={key} /> : <OTPAuth />
-            }
+            {mode === "qr" ? (
+              <QRAuth
+                message={details.message}
+                apikey={details.apikey}
+                onSuccess={onAuthSuccess}
+              />
+            ) : (
+              <OTPAuth apikey={details.apikey} onSuccess={onAuthSuccess} />
+            )}
           </>
         )}
       </section>
