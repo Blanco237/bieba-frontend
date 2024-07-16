@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const API = axios.create({
-    baseURL: 'http://localhost:5500',
+    baseURL: 'https://bieba-backend.onrender.com',
 })
 
 export default API;
