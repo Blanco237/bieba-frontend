@@ -1,5 +1,5 @@
 .body {
-    @apply w-full flex flex-col gap-0 items-center;
+    @apply w-full flex flex-col gap-6 items-center;
 }
 
 .title {

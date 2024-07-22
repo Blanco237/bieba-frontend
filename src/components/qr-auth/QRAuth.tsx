@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./qr.module.css";
-import { useQRCode } from "next-qrcode";
 import usePusher from "../../lib/hooks/usePusher";
+import QRCode from "react-qr-code";
 
 interface QRProps {
   message: string;
@@ -10,7 +10,6 @@ interface QRProps {
 }
 
 const QRAuth: React.FC<QRProps> = ({ message, apikey, onSuccess }) => {
-  const { Canvas } = useQRCode();
 
   const qrText = `${apikey}:${message}`;
 
@@ -31,9 +30,12 @@ const QRAuth: React.FC<QRProps> = ({ message, apikey, onSuccess }) => {
         Scan Code below with <span>Bieba Auth</span> app to authenticate.
       </h5>
       {qrText ? (
-        <Canvas
-          options={{ scale: 8, color: { dark: "#4F46E5", light: "#ffffff" } }}
-          text={qrText}
+        <QRCode
+          value={qrText}
+          size={256}
+          level="L"
+          bgColor="#ffffff"
+          fgColor="#4F46E5"
         />
       ) : (
         <></>
