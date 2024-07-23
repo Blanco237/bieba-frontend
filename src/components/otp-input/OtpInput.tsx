@@ -21,6 +21,11 @@ const OtpInput:React.FC<OtpInputProps> = ({ setOtp, hideTitle = false }) => {
     const { value } = e.target;
     if(isNaN(Number(value))) return;
 
+    if(value.length === 6) {
+      setOtpArray(value.split(''));
+      return;
+    }
+
     setOtpArray((prev) => {
       const newOtp = [...prev];
       newOtp[idx] = value.substring(value.length - 1);

@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [callback, setCallback] = useState('');
   const [updating, setUpdating] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('Copy');
 
   const updateCallback = async () => {
     try {
@@ -47,6 +48,19 @@ const Dashboard = () => {
   }, [id])
 
 
+
+  const copyKey = () => {
+    navigator.clipboard.writeText(organization?.api_key!)
+    .then(() => {
+      setMessage('Copied');
+      setTimeout(() => {
+        setMessage('Copy')
+      }, 3000)
+    })
+    .catch((error) => {
+      console.error("Error copying text to clipboard: ", error);
+    });
+  }
   
 
   return (
@@ -61,6 +75,11 @@ const Dashboard = () => {
           <p className={styles.subtitle}>
             {organization?.email}
           </p>
+         <div className="flex gap-2">
+          <h6 className="font-medium">Api Key:</h6>
+          <span>{organization?.api_key?.replace(/./g, '*')}</span>
+          <button className="bg-gray-300 px-3 py-[2px] rounded-md hover:bg-gray-400 text-sm font-medium transition-colors" onClick={copyKey}>{message}</button>
+         </div>
         </div>
         <div className="flex flex-col gap-2 w-full">
           <Input

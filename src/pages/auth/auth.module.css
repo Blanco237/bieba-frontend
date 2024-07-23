@@ -3,11 +3,12 @@
 }
 
 .body > section {
-  @apply w-1/2;
+  @apply lg:w-1/2 w-full;
 }
 
+
 .right {
-  @apply relative overflow-hidden isolate h-screen;
+  @apply relative overflow-hidden isolate h-screen hidden lg:block;
   background: linear-gradient(180deg, #3730a3 0%, #312e81 100%);
 }
 
@@ -74,7 +75,7 @@
   
 
 .left {
-    @apply flex flex-col px-28 py-6 items-start gap-7 h-screen overflow-y-auto;
+    @apply flex flex-col lg:px-28 text-center px-4 py-6 items-start gap-7 h-screen overflow-y-auto;
     scrollbar-width: thin;
 }
 
